@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+    <!-- 事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!-- 数据源 -->
+        <property name="dataSource" ref="dataSource"/> <!-- 引用applicationContext-dao.xml中dataSource -->
+    </bean>
+
+    <!-- 通知 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <!-- 传播行为，“增删改”行为都需要是用 【propagation="REQUIRED"】；“查”行为需要使用【propagation="SUPPORTS"】  -->
+            <tx:method name="save*"
+                       propagation="REQUIRED"/>    <!-- propagation="REQUIRED"代表，如果事务存在，就使用当前事务；如果事务不存在，就开启一个新的事务 -->
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="add*" propagation="REQUIRED"/>
+            <tx:method name="create*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="find*" propagation="SUPPORTS"
+                       read-only="true"/>    <!-- propagation="SUPPORTS"代表，如果事务存在就使用当前事务进行查询，如果当前事务不存在，也不会开启一个新的事务 -->
+            <tx:method name="select*" propagation="SUPPORTS" read-only="true"/>
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- 配置切面 -->
+    <aop:config>
+
+        <!-- 切面表达式：execution(* com.taotao.service.*.*(..))
+                星1：任何返回值
+                星2：任何类
+                星3：任何方法
+                (..)：任意参数
+            此表达式表达的意思是：任何返回值和com.taotao.service下面的任何类下面的任何方法（任何方法包含任意参数）都会被拦截
+                 -->
+        <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.taotao.rest.service.*.*(..))"/>
+    </aop:config>
+
+</beans>
+
+
+

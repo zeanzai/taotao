@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         id="taotao" version="2.5">
+    <display-name>taotao-manager</display-name>
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>default.html</welcome-file>
+        <welcome-file>default.htm</welcome-file>
+        <welcome-file>default.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!-- 需要配置spring容器、前端控制器、乱码解析器 -->
+    <!-- 加载spring容器 -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring/applicationContext-*.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!-- 解决post乱码 -->
+    <filter>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>utf-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern> <!-- 拦截所有请求，通过CharacterEncodingFilter对其进行过滤 -->
+    </filter-mapping>
+
+    <!-- 配置springmvc的前端控制器 -->
+    <servlet>
+        <servlet-name>taotao-manager</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!-- contextConfigLocation不是必须的， 如果不配置contextConfigLocation， springmvc的配置文件默认在：WEB-INF/servlet的name+"-servlet.xml" -->
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring/springmvc.xml</param-value>
+        </init-param>
+
+        <!-- 关于对load-on-startup的一些解释：
+            1)load-on-startup元素标记容器是否在启动的时候就加载这个servlet(实例化并调用其init()方法)。
+            2)它的值必须是一个整数，表
+            2)当值为0或者大于0时，表示容器在应用启动时就加载并初始化示servlet应该被载入的顺序；这个servlet；
+            3)当值小于0或者没有指定时，则表示容器在该servlet被选择时才会去加载；
+            4)正数的值越小，该servlet的优先级越高，应用启动时就越先加载（代表优先级，并不代表启动延迟时间）；
+            5)当值相同时，容器就会自己选择顺序来加载。
+        -->
+        <load-on-startup>1</load-on-startup>
+
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>taotao-manager</servlet-name>
+        <url-pattern>/</url-pattern>    <!-- 拦截所有请求，包括静态资源 -->
+    </servlet-mapping>
+
+
+</web-app>

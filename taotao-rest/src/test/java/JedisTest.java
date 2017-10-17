@@ -1,4 +1,3 @@
-import jdk.nashorn.internal.scripts.JD;
 import org.junit.Test;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Jedis;

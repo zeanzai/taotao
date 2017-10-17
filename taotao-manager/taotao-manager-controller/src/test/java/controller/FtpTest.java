@@ -1,13 +1,12 @@
 package controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-
+import com.taotao.common.utils.FtpUtil;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.junit.Test;
 
-import com.taotao.common.utils.FtpUtil;
+import java.io.File;
+import java.io.FileInputStream;
 
 public class FtpTest {
 

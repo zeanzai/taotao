@@ -6,6 +6,7 @@
         <artifactId>taotao-parent</artifactId>
         <groupId>com.taotao</groupId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../taotao-parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.taotao</groupId>
